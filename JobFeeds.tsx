@@ -5,29 +5,22 @@ import moment from 'moment';
 
 const JobFeed = () => {
   const API_FETCH_JOB_IDS = `https://hacker-news.firebaseio.com/v0/jobstories.json`;
-  // const API_FETCH_JOB_CONTENT = `https://hacker-news.firebaseio.com/v0/item`;
+  const API_FETCH_JOB_CONTENT = `https://hacker-news.firebaseio.com/v0/item`;
 
   const [postList, setPostList] = useState([]);
   const [jobIds, setJobIds] = useState([]);
 
   const fetchAllJobIds = async () => {
     const response = await axios.get(API_FETCH_JOB_IDS);
-    const postIds = response.data;
-    // console.log(postIds);
-    fetchJobByIDs(postIds);
-
-    // console.log(response.data);
+    const jobIds = response.data;
+    fetchJobByIDs(jobIds);
   };
 
-  const fetchJobByIDs = (idList) => {
-    idList.forEach((postId) => {
-      axios
-        .get(`https://hacker-news.firebaseio.com/v0/item/${postId}.json`)
-        .then((response) => {
-          setPostList((posts) => [...posts, response.data]);
-          console.log(response.data);
-          console.log(postList);
-        });
+  const fetchJobByIDs = (jobIds) => {
+    jobIds.forEach((id) => {
+      axios.get(`${API_FETCH_JOB_CONTENT}/${id}.json`).then((response) => {
+        setPostList((posts) => [...posts, response.data]);
+      });
     });
   };
 
